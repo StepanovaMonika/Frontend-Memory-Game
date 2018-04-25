@@ -14,10 +14,16 @@ let stars = document.querySelector('.stars');
 let winScreen = document.querySelector('.winscreen');
 let winStars = document.getElementById('winstars');
 let winMoves = document.getElementById('winmoves');
-// Ëlapsed time variables
-let timeStart;
-let timeEnd;
 
+// Elapsed time variables
+let time = document.querySelector('.time');
+let winTime = document.getElementById('wintime');
+
+// Elapsed time variables
+let seconds = 0
+let minutes = 0
+let t;
+let timerIsOff = true;
 
 // This function starts the gameboard
 restartFunction();
@@ -28,6 +34,44 @@ restart2.addEventListener('click', restartFunction);
 
 
 /* Functions */
+
+/* Time Functions */
+function startTimeFunction(){
+	if (timerIsOff === true) {
+		timer();
+		timerIsOff = false;
+	}
+}
+
+function stopTimeFunction(){
+	clearTimeout(t);
+	timerIsOff = true;
+}
+
+function restartTimeFunction(){
+	clearTimeout(t);
+	time.textContent = '00:00';
+	seconds = 0;
+	minutes = 0;
+	timerIsOff = true;
+}
+
+//Add fuction from https://jsfiddle.net/Daniel_Hug/pvk6p
+function add() {
+    seconds++;
+    if (seconds >= 60) {
+         seconds = 0;
+         minutes++;
+    } 
+    time.textContent = (minutes ? (minutes > 9 ? minutes : '0' + minutes) : '00') + ':' + (seconds > 9 ? seconds : '0' + seconds);
+    winTime.textContent = 'Time: ' + (minutes ? (minutes > 9 ? minutes : '0' + minutes) : '00') + ':' + (seconds > 9 ? seconds : '0' + seconds);
+    // time.textContent = seconds;
+    timer();
+}
+
+function timer() {
+    t = setTimeout(add, 1000);
+}
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -57,6 +101,7 @@ function restartFunction() {
 	openPairs = 0;
 	stars.textContent = '★ ★ ★';
 	winScreen.style.display = 'none';
+	restartTimeFunction();
 }
 
 /* Delete the cards from the deck,
@@ -80,11 +125,7 @@ function placeCards() {
 
 // Choosing cards
 function displayCard() {
-
-	// Start timer after clicking the first card
-	if (counter == 0) {
-        timeStart = performance.now();
-    }
+	startTimeFunction();
 
 	if (this.classList.contains('open')) {
 	} else {
@@ -118,7 +159,7 @@ function match() {
 		setTimeout(function(){
 			currentCards[1].classList.remove('open');
 			currentCards[0].classList.remove('open');
-		}, 350);
+		}, 300);
 		moveCounter();		
 	}
 }
@@ -129,7 +170,7 @@ function moveCounter() {
 	moves.textContent = counter;
 	if (counter > 20) {
 		stars.textContent = '★ ☆ ☆';
-	} else if (counter > 16) {
+	} else if (counter > 15) {
 		stars.textContent = '★ ★ ☆';
 	}
 }
@@ -139,10 +180,9 @@ function isEnd() {
 	openPairs += 1;
 	if (openPairs == 8) {
 		winScreen.style.display = 'block';
+		stopTimeFunction()
 		winStars.textContent = 'Stars: ' + stars.textContent;
 		winMoves.textContent = 'Moves: '+ counter;
-		timeEnd = performance.now();
-		timer.textContent = 'Total time: ' + Math.round((timeEnd - timeStart)/1000) + ' seconds';
 	}
 }
 
