@@ -8,15 +8,12 @@ There are 16 cards with 8 different images in the game. The object of the game i
 
 Once the game is over, the player will receive a star rating with the elapsed time and number of moves it took him to finish the game.
 
-
 ### Stars rating:
 	* more than 20 moves = 1 star
 	* 16-20 moves = 2 stars
 	* 15 moves or less = 3 stars
 
-
-## Created with
+## Created with:
 * HTML, CSS & JavaScript
 * <a href="https://fontawesome.com/">Font Awesome</a>
 * <a href="https://fonts.google.com/">Google Fonts</a>
-
